@@ -37,7 +37,7 @@ OE_SUPERADMIN="escaflowne99"
 GENERATE_RANDOM_PASSWORD="False"
 OE_CONFIG="${OE_USER}-server"
 # Set the website name
-WEBSITE_NAME="manzada"
+WEBSITE_NAME="new.manzada.net"
 # Set the default Odoo longpolling port (you still have to use -c /etc/odoo-server.conf for example to use this.)
 LONGPOLLING_PORT="8072"
 # Set to "True" to install certbot and have ssl enabled, "False" to use http
@@ -388,7 +388,7 @@ fi
 # Enable ssl with certbot
 #--------------------------------------------------
 
-if [ $INSTALL_NGINX = "True" ] && [ $ENABLE_SSL = "True" ] && [ $ADMIN_EMAIL != "fauzi@manzada.net" ]  && [ $WEBSITE_NAME != "_" ];then
+if [ $INSTALL_NGINX = "True" ] && [ $ENABLE_SSL = "True" ] && [ $ADMIN_EMAIL != "admin@example.com" ]  && [ $WEBSITE_NAME != "_" ];then
   sudo apt-get update -y
   sudo apt install snapd -y
   sudo snap install core; snap refresh core
@@ -399,8 +399,8 @@ if [ $INSTALL_NGINX = "True" ] && [ $ENABLE_SSL = "True" ] && [ $ADMIN_EMAIL != 
   echo "SSL/HTTPS is enabled!"
 else
   echo "SSL/HTTPS isn't enabled due to choice of the user or because of a misconfiguration!"
-  if $ADMIN_EMAIL = "fauzi@manzada.net";then 
-    echo "Certbot does not support registering fauzi@manzada.net. You should use real e-mail address."
+  if $ADMIN_EMAIL = "admin@example.com";then 
+    echo "Certbot does not support registering admin@example.com. You should use real e-mail address."
   fi
   if $WEBSITE_NAME = "_";then
     echo "Website name is set as _. Cannot obtain SSL Certificate for _. You should use real website address."
