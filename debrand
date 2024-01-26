@@ -16,7 +16,7 @@ sudo sed -i '/id: "settings",/a hide: "true",' /home/odoo/odoo-server/addons/web
 sudo sed -i '/id: "account",/a hide: "true",' /home/odoo/odoo-server/addons/web/static/src/webclient/user_menu/user_menu_items.js
 
 
-echo "Search Odoo String ...."
+echo "Text debranding ..."
 files=$(sudo grep -rl 'www.odoo.com' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/www.odoo.com/manzada.net/g'
 files=$(sudo grep -rl 'odoo.com' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/odoo.com/manzada.net/g'
 files=$(sudo grep -rl ' Odoo ' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/ Odoo / Manzada /g'
@@ -29,6 +29,11 @@ files=$(sudo grep -rl 'Odoo!' /home/odoo/odoo-server/) && echo $files | sudo xar
 files=$(sudo grep -rl ' Odoo,' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/ Odoo,/ Manzada,/g'
 files=$(sudo grep -rl "'OdooBot'" /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i "s/'OdooBot'/'Ramdan'/g"
 files=$(sudo grep -rl '"OdooBot"' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/"OdooBot"/"Ramdan"/g'
+
+echo "Icon debranding ..."
+yes | cp -rf *.png /home/odoo/odoo-server/addons/web/static/img/
+yes | cp -rf *.svg /home/odoo/odoo-server/addons/web/static/img/
+yes | cp -rf *.ico /home/odoo/odoo-server/addons/web/static/img/
 
 echo "Starting Odoo-server..."
 sudo systemctl start odoo-server
