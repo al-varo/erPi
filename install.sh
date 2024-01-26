@@ -407,6 +407,8 @@ else
   fi
 fi
 
+sudo cp -r $OE_HOME_EXT $OE_HOME/master-server
+
 echo -e "* Starting Odoo Service"
 sudo su root -c "/etc/init.d/$OE_CONFIG start"
 echo "-----------------------------------------------------------"
