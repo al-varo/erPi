@@ -1,0 +1,34 @@
+#!/bin/bash
+echo "stopping odoo-server..."
+sudo systemctl stop odoo-server
+
+echo "Removing failed debranding..."
+sudo rm -rf /home/odoo/odoo-server
+
+echo "Rollback..."
+sudo cp -r /home/odoo/master-server /home/odoo/odoo-server
+
+# Hide specific menu in user menu
+echo "Customize Usermenu ..."
+sudo sed -i '/id: "documentation",/a hide: "true",' /home/odoo/odoo-server/addons/web/static/src/webclient/user_menu/user_menu_items.js
+sudo sed -i '/id: "support",/a hide: "true",' /home/odoo/odoo-server/addons/web/static/src/webclient/user_menu/user_menu_items.js
+sudo sed -i '/id: "settings",/a hide: "true",' /home/odoo/odoo-server/addons/web/static/src/webclient/user_menu/user_menu_items.js
+sudo sed -i '/id: "account",/a hide: "true",' /home/odoo/odoo-server/addons/web/static/src/webclient/user_menu/user_menu_items.js
+
+
+echo "Search Odoo String ...."
+files=$(sudo grep -rl 'www.odoo.com' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/www.odoo.com/manzada.net/g'
+files=$(sudo grep -rl 'odoo.com' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/odoo.com/manzada.net/g'
+files=$(sudo grep -rl ' Odoo ' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/ Odoo / Manzada /g'
+files=$(sudo grep -rl 'Odoo ' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/Odoo /Manzada /g'
+files=$(sudo grep -rl '>Odoo<' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/>Odoo</>Manzada</g'
+files=$(sudo grep -rl "'Odoo'" /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i "s/'Odoo'/'Manzada'/g"
+files=$(sudo grep -rl '"Odoo"' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/"Odoo"/"Manzada"/g'
+files=$(sudo grep -rl 'Odoo!' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/Odoo!/Manzada!/g'
+#files=$(sudo grep -rl ' Odoo.' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/ Odoo./ Manzada./g'
+files=$(sudo grep -rl ' Odoo,' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/ Odoo,/ Manzada,/g'
+files=$(sudo grep -rl "'OdooBot'" /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i "s/'OdooBot'/'Ramdan'/g"
+files=$(sudo grep -rl '"OdooBot"' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/"OdooBot"/"Ramdan"/g'
+
+echo "Starting Odoo-server..."
+sudo systemctl start odoo-server
