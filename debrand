@@ -2,7 +2,7 @@
 
 OE_BRAND="Manzada"
 OE_WEB="manzada"
-OE_HOME="/home/odoo/odoo-server/"
+OE_HOME="/home/odoo/odoo-server/addons/"
 
 echo "stopping odoo-server..."
 sudo systemctl stop odoo-server
