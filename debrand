@@ -22,11 +22,11 @@ sudo sed -i '/id: "account",/a hide: "true",' /home/odoo/odoo-server/addons/web/
 
 
 echo "Text debranding ..."
-files=$(grep -rl "Odoo" $OE_HOME) && echo $files | xargs sed -i '/"/s/Odoo/$OE_BRAND/g'
-files=$(grep -rl "Odoo" $OE_HOME) && echo $files | xargs sed -i "/'/s/Odoo/$OE_BRAND/g"
-files=$(grep -rl "odoo" $OE_HOME) && echo $files | xargs sed -i '/"/s/odoo/$OE_WEB/g'
-files=$(grep -rl "odoo" $OE_HOME) && echo $files | xargs sed -i "/'/s/odoo/$OE_WEB/g"
-files=$(grep -rl ">Odoo<" $OE_HOME) && echo $files | xargs sed -i 's/>Odoo</>$OE_BRAND</g'
+files=$(sudo grep -rl "Odoo" $OE_HOME) && echo $files | sudo xargs sed -i '/"/s/Odoo/$OE_BRAND/g'
+files=$(sudo grep -rl "Odoo" $OE_HOME) && echo $files | sudo xargs sed -i "/'/s/Odoo/$OE_BRAND/g"
+files=$(sudo grep -rl "odoo" $OE_HOME) && echo $files | sudo xargs sed -i '/"/s/odoo/$OE_WEB/g'
+files=$(sudo grep -rl "odoo" $OE_HOME) && echo $files | sudo xargs sed -i "/'/s/odoo/$OE_WEB/g"
+files=$(sudo grep -rl ">Odoo<" $OE_HOME) && echo $files | sudo xargs sed -i 's/>Odoo</>$OE_BRAND</g'
 
 #files=$(sudo grep -rl 'www.odoo.com' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/www.odoo.com/manzada.net/g'
 #files=$(sudo grep -rl 'odoo.com' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/odoo.com/manzada.net/g'
