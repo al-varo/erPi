@@ -1,4 +1,9 @@
 #!/bin/bash
+
+OE_BRAND="Manzada"
+OE_WEB="manzada"
+OE_HOME="/home/odoo/odoo-server/"
+
 echo "stopping odoo-server..."
 sudo systemctl stop odoo-server
 
@@ -17,18 +22,24 @@ sudo sed -i '/id: "account",/a hide: "true",' /home/odoo/odoo-server/addons/web/
 
 
 echo "Text debranding ..."
-files=$(sudo grep -rl 'www.odoo.com' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/www.odoo.com/manzada.net/g'
-files=$(sudo grep -rl 'odoo.com' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/odoo.com/manzada.net/g'
-files=$(sudo grep -rl ' Odoo ' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/ Odoo / Manzada /g'
-files=$(sudo grep -rl 'Odoo ' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/Odoo /Manzada /g'
-files=$(sudo grep -rl '>Odoo<' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/>Odoo</>Manzada</g'
-files=$(sudo grep -rl "'Odoo'" /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i "s/'Odoo'/'Manzada'/g"
-files=$(sudo grep -rl '"Odoo"' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/"Odoo"/"Manzada"/g'
-files=$(sudo grep -rl 'Odoo!' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/Odoo!/Manzada!/g'
+files=$(grep -rl "Odoo" $OE_HOME) && echo $files | xargs sed -i '/"/s/Odoo/$OE_BRAND/g'
+files=$(grep -rl "Odoo" $OE_HOME) && echo $files | xargs sed -i "/'/s/Odoo/$OE_BRAND/g"
+files=$(grep -rl "odoo" $OE_HOME) && echo $files | xargs sed -i '/"/s/odoo/$OE_WEB/g'
+files=$(grep -rl "odoo" $OE_HOME) && echo $files | xargs sed -i "/'/s/odoo/$OE_WEB/g"
+files=$(grep -rl ">Odoo<" $OE_HOME) && echo $files | xargs sed -i 's/>Odoo</>$OE_BRAND</g'
+
+#files=$(sudo grep -rl 'www.odoo.com' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/www.odoo.com/manzada.net/g'
+#files=$(sudo grep -rl 'odoo.com' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/odoo.com/manzada.net/g'
+#files=$(sudo grep -rl ' Odoo ' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/ Odoo / Manzada /g'
+#files=$(sudo grep -rl 'Odoo ' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/Odoo /Manzada /g'
+#files=$(sudo grep -rl '>Odoo<' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/>Odoo</>Manzada</g'
+#files=$(sudo grep -rl "'Odoo'" /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i "s/'Odoo'/'Manzada'/g"
+#files=$(sudo grep -rl '"Odoo"' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/"Odoo"/"Manzada"/g'
+#files=$(sudo grep -rl 'Odoo!' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/Odoo!/Manzada!/g'
 #files=$(sudo grep -rl ' Odoo.' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/ Odoo./ Manzada./g'
-files=$(sudo grep -rl ' Odoo,' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/ Odoo,/ Manzada,/g'
-files=$(sudo grep -rl "'OdooBot'" /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i "s/'OdooBot'/'Ramdan'/g"
-files=$(sudo grep -rl '"OdooBot"' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/"OdooBot"/"Ramdan"/g'
+#files=$(sudo grep -rl ' Odoo,' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/ Odoo,/ Manzada,/g'
+#files=$(sudo grep -rl "'OdooBot'" /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i "s/'OdooBot'/'Ramdan'/g"
+#files=$(sudo grep -rl '"OdooBot"' /home/odoo/odoo-server/) && echo $files | sudo xargs sed -i 's/"OdooBot"/"Ramdan"/g'
 
 echo "Icon debranding ..."
 yes | sudo cp *.png /home/odoo/odoo-server/addons/web/static/img/
