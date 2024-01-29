@@ -300,23 +300,22 @@ if [ $INSTALL_NGINX = "True" ]; then
   echo -e "\n---- Installing and setting up Nginx ----"
   sudo apt install nginx -y
   cat <<EOF > ~/odoo
-#odoo server
-upstream manzada {
-  server 127.0.0.1:8069;
-}
-upstream manzadachat {
-  server 127.0.0.1:8072;
-}
-map $http_upgrade $connection_upgrade {
-  default upgrade;
-  ''      close;
-}
-
 server {
+  ssi off;
   listen 80;
 
   # set proper server name after domain set
   server_name $WEBSITE_NAME;
+
+  # Add Headers for odoo proxy mode
+  proxy_set_header X-Forwarded-Host \$host;
+  proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+  proxy_set_header X-Forwarded-Proto \$scheme;
+  proxy_set_header X-Real-IP \$remote_addr;
+  add_header X-Frame-Options "SAMEORIGIN";
+  add_header X-XSS-Protection "1; mode=block";
+  proxy_set_header X-Client-IP \$remote_addr;
+  proxy_set_header HTTP_X_FORWARDED_HOST \$remote_addr;
 
   #   odoo    log files
   access_log  /var/log/nginx/$OE_USER-access.log;
@@ -349,29 +348,14 @@ server {
   large_client_header_buffers 4 64k;
   client_max_body_size 0;
 
-  # Redirect websocket requests to odoo gevent port
-  location /websocket {
-    proxy_pass http://manzadachat;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection $connection_upgrade;
-    proxy_set_header X-Forwarded-Host $http_host;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-    proxy_set_header X-Real-IP $remote_addr;
+  location / {
+    proxy_pass    http://127.0.0.1:$OE_PORT;
+    # by default, do not forward anything
+    proxy_redirect off;
   }
 
-  location / {
-    # Add Headers for odoo proxy mode
-    proxy_set_header X-Forwarded-Host \$host;
-    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto \$scheme;
-    proxy_set_header X-Real-IP \$remote_addr;
-    add_header X-Frame-Options "SAMEORIGIN";
-    add_header X-XSS-Protection "1; mode=block";
-    proxy_set_header X-Client-IP \$remote_addr;
-    proxy_set_header HTTP_X_FORWARDED_HOST \$remote_addr;
-    proxy_redirect off;
-    proxy_pass http://manzada;
+  location /longpolling {
+    proxy_pass http://127.0.0.1:$LONGPOLLING_PORT;
   }
 
   location ~* .(js|css|png|jpg|jpeg|gif|ico)$ {
